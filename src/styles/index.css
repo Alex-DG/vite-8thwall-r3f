@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  font-family: Arial, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: transparent;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+.loading {
+  font-size: 2rem;
+  color: aliceblue;
+}
+
+.picker-container {
+  position: absolute !important;
+  bottom: 20px;
+  left: 20px;
+  width: auto;
+  height: auto;
+}
+.picker-container > h1 {
+  background-color: rgba(0, 0, 0, 0.201);
+  border-radius: 8px;
+  padding: 0.25em 0.375em;
+  color: aliceblue;
+  font-size: 1.55rem;
+  text-align: center;
+}
+.picker {
+  position: relative !important;
+  top: 0;
+  left: 0;
+  width: 90px !important;
+  height: 90px !important;
+}
