@@ -1,14 +1,24 @@
-import { useRef, useState, useEffect } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useRef, useState, useEffect, useMemo } from 'react'
+import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { useSnapshot } from 'valtio'
 import gsap from 'gsap'
 
 import modelSrc from '../../assets/models/shoe-draco.glb'
 
+import { points } from './points'
+
+import ShoePart from './components/ShoePart'
+
 const Shoe = ({ state }) => {
-  const ref = useRef()
-  const isReady = useRef(false)
+  const { camera } = useThree()
+
+  const [isReady, setReady] = useState(false)
+
+  const shoe = useRef()
+  const plane = useRef()
+  const selected = useRef()
+
   const snap = useSnapshot(state)
 
   // Drei's useGLTF hook sets up draco automatically, that's how it differs from useLoader(GLTFLoader, url)
@@ -19,9 +29,18 @@ const Shoe = ({ state }) => {
   // Animate model
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
-    ref.current.rotation.z = -0.2 - (1 + Math.sin(time / 1.5)) / 12
-    ref.current.rotation.x = Math.cos(time / 4) / 6
-    ref.current.position.y = (1 + Math.sin(time / 1.5)) / 6
+
+    // Update model rotation and position
+    shoe.current.rotation.z = -0.2 - (1 + Math.sin(time / 1.5)) / 20
+    shoe.current.rotation.x = Math.cos(time / 4) / 8
+    shoe.current.position.y = (1 + Math.sin(time / 3)) / 10
+
+    // Update plane direction
+    const shouldUpdatePlane =
+      plane?.current && selected?.current && camera?.position
+    if (shouldUpdatePlane) {
+      plane.current.lookAt(camera.position)
+    }
   })
 
   // Cursor showing current color
@@ -43,37 +62,72 @@ const Shoe = ({ state }) => {
   }, [hovered])
 
   useEffect(() => {
-    if (!state.loading) {
-      gsap.to(ref.current.rotation, {
-        y: Math.PI * 4,
+    if (!state.loading && !isReady) {
+      gsap.to(shoe.current.rotation, {
+        duration: 1.4,
+        y: Math.PI * 6,
         ease: 'power3.out',
+        delay: 0.5,
       })
       const tl = gsap.timeline()
-      tl.to(ref.current.scale, {
+      tl.to(shoe.current.scale, {
         duration: 1.5,
         x: 1.25,
         y: 1.25,
         z: 1.25,
+        delay: 0.5,
         ease: 'power3.out',
       })
-      tl.to(ref.current.scale, {
+      tl.to(shoe.current.scale, {
         duration: 1,
         x: 1,
         y: 1,
         z: 1,
         ease: 'power3.out',
         onComplete: () => {
-          isReady.current = true
+          setReady(true)
         },
       })
     }
-  }, [state.loading])
+  }, [state.loading, isReady])
+
+  const Panel = () => {
+    selected.current = shoe?.current?.children?.find(
+      (c) => c?.name === snap?.current
+    )
+
+    if (selected?.current) {
+      const start = points[snap.current].start
+
+      // const start = new THREE.Vector3()
+      // start.fromArray(selected.current.geometry.attributes.position.array)
+      // start.z = 0
+      // start.x += 0.25
+
+      const name = points[snap.current].name
+      const end = points[snap.current].end
+      const endLine = [end[0], end[1] - 0.15, end[2]]
+
+      const vertices = useMemo(
+        () => [start, endLine].map((v) => new THREE.Vector3(...v)),
+        [start, endLine]
+      )
+
+      const onUpdateGeometry = (geometry) => geometry.setFromPoints(vertices)
+
+      return <ShoePart {...{ onUpdateGeometry, plane, end, name, isReady }} />
+    }
+
+    return null
+  }
 
   // Using the GLTFJSX output here to wire in app-state and hook up events
   return (
     <>
+      <Panel />
+
       <group
-        ref={ref}
+        ref={shoe}
         dispose={null}
         onPointerOver={(e) => (
           e.stopPropagation(), set(e.object.material.name)
@@ -86,6 +140,7 @@ const Shoe = ({ state }) => {
         scale={0}
       >
         <mesh
+          name='laces'
           receiveShadow
           castShadow
           geometry={nodes.shoe.geometry}
@@ -93,6 +148,7 @@ const Shoe = ({ state }) => {
           material-color={snap.items.laces}
         />
         <mesh
+          name='mesh'
           receiveShadow
           castShadow
           geometry={nodes.shoe_1.geometry}
@@ -100,6 +156,7 @@ const Shoe = ({ state }) => {
           material-color={snap.items.mesh}
         />
         <mesh
+          name='caps'
           receiveShadow
           castShadow
           geometry={nodes.shoe_2.geometry}
@@ -107,6 +164,7 @@ const Shoe = ({ state }) => {
           material-color={snap.items.caps}
         />
         <mesh
+          name='inner'
           receiveShadow
           castShadow
           geometry={nodes.shoe_3.geometry}
@@ -114,6 +172,7 @@ const Shoe = ({ state }) => {
           material-color={snap.items.inner}
         />
         <mesh
+          name='sole'
           receiveShadow
           castShadow
           geometry={nodes.shoe_4.geometry}
@@ -121,6 +180,7 @@ const Shoe = ({ state }) => {
           material-color={snap.items.sole}
         />
         <mesh
+          name='stripes'
           receiveShadow
           castShadow
           geometry={nodes.shoe_5.geometry}
@@ -128,6 +188,7 @@ const Shoe = ({ state }) => {
           material-color={snap.items.stripes}
         />
         <mesh
+          name='band'
           receiveShadow
           castShadow
           geometry={nodes.shoe_6.geometry}
@@ -135,6 +196,7 @@ const Shoe = ({ state }) => {
           material-color={snap.items.band}
         />
         <mesh
+          name='patch'
           receiveShadow
           castShadow
           geometry={nodes.shoe_7.geometry}

@@ -12,6 +12,7 @@
     "@react-three/drei": "^9.21.0",
     "@react-three/fiber": "^8.3.1",
     "@react-three/postprocessing": "^2.6.1",
+    "@tweenjs/tween.js": "^18",
     "gsap": "^3.10.4",
     "postprocessing": "^6.28.5",
     "react": "^18.2.0",
