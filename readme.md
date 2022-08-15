@@ -8,7 +8,7 @@
 
 [Demo](https://vite-8thwall-r3f.vercel.app/)
 
-![Screenshot_20220815-152426](https://user-images.githubusercontent.com/4311684/184644457-362c1f8f-f678-4286-99d5-65f37511fce5.png)
+https://user-images.githubusercontent.com/4311684/184647851-8dadc8c7-4038-43bf-9b75-fe658763dc22.mp4
 
 ## Setup
 
