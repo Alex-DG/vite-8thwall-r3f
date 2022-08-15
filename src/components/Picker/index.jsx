@@ -14,7 +14,6 @@ const Picker = ({ state }) => {
         color={snap.items[snap.current]}
         onChange={(color) => (state.items[snap.current] = color)}
       />
-      <h1>{snap.current}</h1>
     </div>
   )
 }
