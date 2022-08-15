@@ -8,15 +8,16 @@ import modelSrc from '../../assets/models/shoe-draco.glb'
 
 import { points } from './points'
 
+import ShoePart from './components/ShoePart'
+
 const Shoe = ({ state }) => {
   const { camera } = useThree()
-  const ref = useRef()
 
+  const [isReady, setReady] = useState(false)
+
+  const shoe = useRef()
   const plane = useRef()
-  const line = useRef()
-  const selected = useRef(null)
-
-  const isReady = useRef(false)
+  const selected = useRef()
 
   const snap = useSnapshot(state)
 
@@ -28,12 +29,16 @@ const Shoe = ({ state }) => {
   // Animate model
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
-    ref.current.rotation.z = -0.2 - (1 + Math.sin(time / 1.5)) / 20
-    ref.current.rotation.x = Math.cos(time / 4) / 8
-    // ref.current.rotation.y += 0.01
-    ref.current.position.y = (1 + Math.sin(time / 3)) / 10
 
-    if (selected?.current && camera?.position) {
+    // Update model rotation and position
+    shoe.current.rotation.z = -0.2 - (1 + Math.sin(time / 1.5)) / 20
+    shoe.current.rotation.x = Math.cos(time / 4) / 8
+    shoe.current.position.y = (1 + Math.sin(time / 3)) / 10
+
+    // Update plane direction
+    const shouldUpdatePlane =
+      plane?.current && selected?.current && camera?.position
+    if (shouldUpdatePlane) {
       plane.current.lookAt(camera.position)
     }
   })
@@ -57,34 +62,37 @@ const Shoe = ({ state }) => {
   }, [hovered])
 
   useEffect(() => {
-    if (!state.loading) {
-      gsap.to(ref.current.rotation, {
-        y: Math.PI * 4,
+    if (!state.loading && !isReady) {
+      gsap.to(shoe.current.rotation, {
+        duration: 1.4,
+        y: Math.PI * 6,
         ease: 'power3.out',
+        delay: 0.5,
       })
       const tl = gsap.timeline()
-      tl.to(ref.current.scale, {
+      tl.to(shoe.current.scale, {
         duration: 1.5,
         x: 1.25,
         y: 1.25,
         z: 1.25,
+        delay: 0.5,
         ease: 'power3.out',
       })
-      tl.to(ref.current.scale, {
+      tl.to(shoe.current.scale, {
         duration: 1,
         x: 1,
         y: 1,
         z: 1,
         ease: 'power3.out',
         onComplete: () => {
-          isReady.current = true
+          setReady(true)
         },
       })
     }
-  }, [state.loading])
+  }, [state.loading, isReady])
 
   const Panel = () => {
-    selected.current = ref?.current?.children?.find(
+    selected.current = shoe?.current?.children?.find(
       (c) => c?.name === snap?.current
     )
 
@@ -96,6 +104,7 @@ const Shoe = ({ state }) => {
       // start.z = 0
       // start.x += 0.25
 
+      const name = points[snap.current].name
       const end = points[snap.current].end
       const endLine = [end[0], end[1] - 0.15, end[2]]
 
@@ -105,25 +114,8 @@ const Shoe = ({ state }) => {
       )
 
       const onUpdateGeometry = (geometry) => geometry.setFromPoints(vertices)
-      //onUpdate={onUpdateGeometry}
 
-      return (
-        <>
-          <line ref={line}>
-            <bufferGeometry attach='geometry' onUpdate={onUpdateGeometry} />
-            <lineBasicMaterial attach='material' color='white' />
-          </line>
-
-          <mesh ref={plane} position={end}>
-            <planeBufferGeometry attach='geometry' args={[0.5, 0.3]} />
-            <meshBasicMaterial
-              attach='material'
-              color='white'
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        </>
-      )
+      return <ShoePart {...{ onUpdateGeometry, plane, end, name }} />
     }
 
     return null
@@ -132,9 +124,10 @@ const Shoe = ({ state }) => {
   // Using the GLTFJSX output here to wire in app-state and hook up events
   return (
     <>
-      <Panel />
+      {isReady && <Panel />}
+
       <group
-        ref={ref}
+        ref={shoe}
         dispose={null}
         onPointerOver={(e) => (
           e.stopPropagation(), set(e.object.material.name)
