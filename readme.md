@@ -6,6 +6,8 @@
 
 - On select reveal "point of interests"
 
+[Demo](https://vite-8thwall-r3f.vercel.app/)
+
 ## Setup
 
 Run the following commands:
