@@ -1,6 +1,6 @@
 # ViteJS 8thwall React Three Fiber
 
-- Based on the Exemple: [https://github.com/drcmda/floating-shoe](https://github.com/drcmda/floating-shoe)
+- Based on the Exemple: [https://codesandbox.io/s/floating-shoe-forked-qxjoj](https://codesandbox.io/s/floating-shoe-forked-qxjoj)
 
 - Working with 8thwall hooked with react-three-fiber
 
