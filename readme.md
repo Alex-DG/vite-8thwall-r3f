@@ -1,5 +1,7 @@
 # ViteJS 8thwall React Three Fiber
 
+Floating shoe in the sky + color picker
+
 - Based on the Exemple: [https://codesandbox.io/s/floating-shoe-forked-qxjoj](https://codesandbox.io/s/floating-shoe-forked-qxjoj)
 
 - Working with 8thwall hooked with react-three-fiber
