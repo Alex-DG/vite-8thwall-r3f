@@ -1,6 +1,10 @@
 # ViteJS 8thwall React Three Fiber
 
-- Based on Repo with code by Paul: [https://github.com/drcmda/floating-shoe](https://github.com/drcmda/floating-shoe)
+- Based on the Exemple: [https://github.com/drcmda/floating-shoe](https://github.com/drcmda/floating-shoe)
+
+- Working with 8thwall hooked with react-three-fiber
+
+- On select reveal "point of interests"
 
 ## Setup
 

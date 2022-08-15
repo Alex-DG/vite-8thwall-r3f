@@ -1,8 +1,6 @@
 import { Html } from '@react-three/drei'
 import { useEffect } from 'react'
 
-import Box from '../Box'
-
 const Loader = ({ state }) => {
   useEffect(() => {
     return () => {
@@ -11,13 +9,9 @@ const Loader = ({ state }) => {
   }, [])
 
   return (
-    <>
-      <Html className='loading' center>
-        Loading...
-      </Html>
-
-      <Box position={[0, -0.2, 0]} color={'skyblue'} wireframe />
-    </>
+    <Html className='loading' center>
+      Loading...
+    </Html>
   )
 }
 

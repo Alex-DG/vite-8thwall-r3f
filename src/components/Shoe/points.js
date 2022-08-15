@@ -31,8 +31,8 @@ export const points = {
   },
   band: {
     name: 'band',
-    start: [0.5, -0.1, 0],
-    end: [0.5, 1, 0],
+    start: [-0.3, -0.1, 0],
+    end: [0.2, 1.5, 0],
   },
   patch: {
     name: 'patch',

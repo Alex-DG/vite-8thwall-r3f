@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, ContactShadows } from '@react-three/drei'
 import { useSnapshot } from 'valtio'
 import gsap from 'gsap'
 
@@ -39,7 +39,7 @@ const Shoe = ({ state }) => {
     const shouldUpdatePlane =
       plane?.current && selected?.current && camera?.position
     if (shouldUpdatePlane) {
-      plane.current.lookAt(camera.position)
+      plane.current.rotation.y = camera.rotation.y
     }
   })
 
@@ -106,11 +106,10 @@ const Shoe = ({ state }) => {
 
       const name = points[snap.current].name
       const end = points[snap.current].end
-      const endLine = [end[0], end[1] - 0.15, end[2]]
 
       const vertices = useMemo(
-        () => [start, endLine].map((v) => new THREE.Vector3(...v)),
-        [start, endLine]
+        () => [start, end].map((v) => new THREE.Vector3(...v)),
+        [start, end]
       )
 
       const onUpdateGeometry = (geometry) => geometry.setFromPoints(vertices)

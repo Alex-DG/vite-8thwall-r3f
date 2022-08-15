@@ -1,27 +1,13 @@
 import { Canvas } from '@react-three/fiber'
 import { useRef } from 'react'
-import { proxy } from 'valtio'
 
 import Picker from '../components/Picker'
 
 import use8thWall from '../hooks/use8thWall'
 
-import WrapperAR from './WrapperAR'
+import { state } from '../config/state'
 
-const state = proxy({
-  current: 'mesh',
-  items: {
-    laces: '#ffffff',
-    mesh: '#ffffff',
-    caps: '#ffffff',
-    inner: '#ffffff',
-    sole: '#ffffff',
-    stripes: '#ffffff',
-    band: '#ffffff',
-    patch: '#ffffff',
-  },
-  loading: true,
-})
+import Scene from './Scene'
 
 export default function App() {
   const canvas = useRef(null)
@@ -29,8 +15,8 @@ export default function App() {
 
   return (
     <>
-      <Canvas ref={canvas} shadows>
-        {XR8Data && <WrapperAR {...{ XR8Data, state }} />}
+      <Canvas ref={canvas}>
+        {XR8Data && <Scene {...{ XR8Data, state }} />}
       </Canvas>
 
       <Picker {...{ state }} />

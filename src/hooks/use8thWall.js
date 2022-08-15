@@ -8,7 +8,11 @@ const use8thWall = ({ canvas }) => {
     const initXrScene = ({ scene, camera, renderer }) => {
       // Set the initial camera position relative to the scene we just laid out. This must be at a
       // height greater than y=0.
-      camera.position.set(0, 1, 3)
+      camera.position.set(0, 2, 3)
+
+      renderer.outputEncoding = THREE.sRGBEncoding
+      renderer.shadowMap.enabled = true
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
       setXR8Data({ scene, camera, renderer, ready: true })
     }
