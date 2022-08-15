@@ -115,7 +115,7 @@ const Shoe = ({ state }) => {
 
       const onUpdateGeometry = (geometry) => geometry.setFromPoints(vertices)
 
-      return <ShoePart {...{ onUpdateGeometry, plane, end, name }} />
+      return <ShoePart {...{ onUpdateGeometry, plane, end, name, isReady }} />
     }
 
     return null
@@ -124,7 +124,7 @@ const Shoe = ({ state }) => {
   // Using the GLTFJSX output here to wire in app-state and hook up events
   return (
     <>
-      {isReady && <Panel />}
+      <Panel />
 
       <group
         ref={shoe}
