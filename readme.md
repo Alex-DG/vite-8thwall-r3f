@@ -1,6 +1,6 @@
 # ViteJS 8thwall React Three Fiber
 
-/!\ Problem of FPS this is a quite prototype which need much more work 😅
+⚠️ Problem of FPS this is a quite prototype which need much more work 😅
 
 Floating shoe in the sky + color picker
 
