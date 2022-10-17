@@ -1,5 +1,7 @@
 # ViteJS 8thwall React Three Fiber
 
+/!\ Problem of FPS this is a quite prototype which need much more work 😅
+
 Floating shoe in the sky + color picker
 
 - Based on the Exemple: [https://codesandbox.io/s/floating-shoe-forked-qxjoj](https://codesandbox.io/s/floating-shoe-forked-qxjoj)
